@@ -13,6 +13,7 @@ public sealed record WebhookDispatcher(
         var subscriptions = SubscriptionRepository.GetByEventType(eventType);
         foreach (var subscription in subscriptions)
         {
+
             var request = new
             {
                 Id = Guid.NewGuid(),

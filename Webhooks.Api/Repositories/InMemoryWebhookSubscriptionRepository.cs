@@ -7,7 +7,7 @@ public class InMemoryWebhookSubscriptionRepository
     private readonly List<WebhookSubscription> _subscriptions =[];
     public InMemoryWebhookSubscriptionRepository()
     {
-        _subscriptions.Add(new WebhookSubscription(Guid.NewGuid(), "order.created", "https://webhook.site/fab36292-d452-4002-af1e-71e0a9999ab7", DateTime.UtcNow));
+        _subscriptions.Add(new WebhookSubscription(Guid.NewGuid(), "order.created", "http://localhost:3000/api/webhook", DateTime.UtcNow));
         _subscriptions.Add(new WebhookSubscription(Guid.NewGuid(), "OrderUpdated", "https://webhook.site/2", DateTime.UtcNow));
     }
 
