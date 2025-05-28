@@ -1,9 +1,12 @@
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using Webhooks.Api.Data;
 using Webhooks.Api.Models;
 using Webhooks.Api.Repositories;
 using Webhooks.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 
 builder.Services.AddOpenApi();
 
@@ -12,7 +15,14 @@ builder.Services.AddSingleton<InMemoryWebhookSubscriptionRepository>();
 
 builder.Services.AddHttpClient<WebhookDispatcher>();
 
+builder.Services.AddDbContext<WebhookDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Webhooks"));
+});
+
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 if (app.Environment.IsDevelopment())
 {
@@ -28,10 +38,15 @@ app.UseHttpsRedirection();
 
 app.MapPost("/webhooks/subscriptions", (
     CreateWebhookSubscriptionRequest request,
-    InMemoryWebhookSubscriptionRepository webhookSubscriptionRepository) =>
+    WebhookDbContext webhookDbContext) =>
 {
-    var subscription = new WebhookSubscription(Guid.NewGuid(), request.EventType, request.WebhookUrl, DateTime.UtcNow);
-    webhookSubscriptionRepository.AddSubscription(subscription);
+    var subscription = new WebhookSubscription(
+        Guid.NewGuid(), 
+        request.EventType,
+        request.WebhookUrl, 
+        DateTime.UtcNow);
+
+    webhookDbContext.WebhookSubscriptions.Add(subscription);
     return Results.Ok(subscription);
    })
     .WithTags("Webhook Subscriptions");
@@ -39,17 +54,21 @@ app.MapPost("/webhooks/subscriptions", (
 
 
 
-app.MapGet("/orders", (InMemoryOrderRepository orderRepository) 
-        => Results.Ok((object?)orderRepository.GetAll()))
+app.MapGet("/orders", (WebhookDbContext webhookDbContext) 
+        => Results.Ok((object?)webhookDbContext.Orders.ToList()))
     .WithTags("Orders");
 
 app.MapPost("/orders",async (
-        InMemoryOrderRepository orderRepository,
+        WebhookDbContext webhookDbContext,
         CreateOrderRequest request,
         WebhookDispatcher webhookDispatcher) =>
     {
-        var order = new Order(Guid.NewGuid(), request.CustomerName, request.Amount, DateTime.UtcNow);
-        orderRepository.AddOrder(order);
+        var order = new Order(
+            Guid.NewGuid(), 
+            request.CustomerName,
+            request.Amount,
+            DateTime.UtcNow);
+        webhookDbContext.Orders.Add(order);
 
         await webhookDispatcher.DispatchAsync("order.created", order);
         return Results.Ok(order);

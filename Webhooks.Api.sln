@@ -4,6 +4,12 @@ VisualStudioVersion = 17.12.35506.116
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webhooks.Api", "Webhooks.Api\Webhooks.Api.csproj", "{BA69018D-BCF7-411C-A552-592730C28706}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aspire", "Aspire", "{B33EFCAF-493F-4BA2-A75B-F89F3EA03D40}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webhooks.Api.AppHost", "Webhooks.Api.AppHost\Webhooks.Api.AppHost.csproj", "{D4943433-6E23-42F1-AF2D-6CA75636A58A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webhooks.Api.ServiceDefaults", "Webhooks.Api.ServiceDefaults\Webhooks.Api.ServiceDefaults.csproj", "{84CC5503-F5D4-4DE6-B826-B49D8D1D71DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,8 +20,20 @@ Global
 		{BA69018D-BCF7-411C-A552-592730C28706}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA69018D-BCF7-411C-A552-592730C28706}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA69018D-BCF7-411C-A552-592730C28706}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4943433-6E23-42F1-AF2D-6CA75636A58A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4943433-6E23-42F1-AF2D-6CA75636A58A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4943433-6E23-42F1-AF2D-6CA75636A58A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4943433-6E23-42F1-AF2D-6CA75636A58A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84CC5503-F5D4-4DE6-B826-B49D8D1D71DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84CC5503-F5D4-4DE6-B826-B49D8D1D71DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84CC5503-F5D4-4DE6-B826-B49D8D1D71DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84CC5503-F5D4-4DE6-B826-B49D8D1D71DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D4943433-6E23-42F1-AF2D-6CA75636A58A} = {B33EFCAF-493F-4BA2-A75B-F89F3EA03D40}
+		{84CC5503-F5D4-4DE6-B826-B49D8D1D71DC} = {B33EFCAF-493F-4BA2-A75B-F89F3EA03D40}
 	EndGlobalSection
 EndGlobal

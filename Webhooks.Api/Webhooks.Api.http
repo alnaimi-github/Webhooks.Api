@@ -16,5 +16,5 @@ POST {{Webhooks.Api_HostAddress}}/webhooks/subscriptions
 Content-Type: application/json
 {
     "eventType": "order.created",
-    "webhookUrl": "http://localhost:3000/api/webhook"
+    "webhookUrl": "http://localhost:7000/api/webhook"
 }
