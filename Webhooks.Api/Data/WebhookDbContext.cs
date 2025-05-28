@@ -3,12 +3,19 @@ using Webhooks.Api.Models;
 
 namespace Webhooks.Api.Data;
 
-internal sealed class WebhookDbContext(DbContextOptions<WebhookDbContext> options) : DbContext(options)
+public class WebhookDbContext : DbContext
 {
     public DbSet<WebhookSubscription> WebhookSubscriptions { get; set; } = null!;
     public DbSet<Order> Orders { get; set; } = null!;
+     public DbSet<WebhookDeliveryAttempt> WebhookDeliveryAttempts { get; set; } = null!;
+
+    public WebhookDbContext(DbContextOptions<WebhookDbContext> options) : base(options)
+    {
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<WebhookSubscription>(builder =>
         {
             builder.ToTable("Subscriptions", "webhooks");
@@ -38,6 +45,23 @@ internal sealed class WebhookDbContext(DbContextOptions<WebhookDbContext> option
             builder.Property(o => o.CreatedAt)
                 .IsRequired()
                 .HasDefaultValueSql("GETUTCDATE()");
+        });
+
+
+        modelBuilder.Entity<WebhookDeliveryAttempt>(builder =>
+        {
+            builder.ToTable("WebhookDeliveryAttempts", "webhooks");
+            builder.HasKey(a => a.Id);
+            builder.Property(a => a.WebhookSubscriptionId)
+                .IsRequired();
+            builder.Property(a => a.EventType)
+                .IsRequired()
+                .HasMaxLength(100);
+
+            builder.HasOne<WebhookSubscription>()
+                .WithMany()
+                .HasForeignKey(a => a.WebhookSubscriptionId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }
